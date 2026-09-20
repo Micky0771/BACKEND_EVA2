@@ -20,7 +20,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-5">
             <div class="container-fluid px-4">
                 <a class="navbar-brand d-flex align-items-center" href="/menu">
-                    <h2 class="mb-0 fs-4 fw-bold">USUARIO : XXX</h2>
+                    <h2 class="mb-0 fs-4 fw-bold">USUARIO : {{ nomUsuario }}</h2>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -40,30 +40,86 @@
                 <div class="col-12 col-lg-8">
                     <div class="card shadow-sm border-0 rounded-3">
                         <div class="card-body p-5">
-                            <h2 class="text-center mb-4 fw-bold text-dark">Formulario de Edición de Datos</h2>
+                            <h2 class="text-center mb-4 fw-bold text-dark">Actualizar Servicio</h2>
                             
                             <form action="" method="POST">
                                 {% csrf_token %}
+
                                 <div class="mb-4">
-                                    <input type="number" id="txt1" class="form-control form-control-lg bg-light" placeholder="Dato_1" required/>
+                                    <input type="number"
+                                        id="txt1"
+                                        name="txtnum"
+                                        value="{{ servicio.numero }}"
+                                        class="form-control form-control-lg bg-light"
+                                        placeholder="Número"
+                                        required/>
                                 </div>
+
                                 <div class="mb-4">
-                                    <input type="number" id="txt2" class="form-control form-control-lg bg-light" placeholder="Dato_2" required/>
+                                    <input type="text"
+                                        id="txt2"
+                                        name="txtcli"
+                                        value="{{ servicio.cliente }}"
+                                        class="form-control form-control-lg bg-light"
+                                        placeholder="Cliente"
+                                        required/>
                                 </div>
+
                                 <div class="mb-4">
-                                    <select id="cbomar" name="cbo1" class="form-select form-select-lg bg-light" required>
-                                        <option value="">Dato_3</option>
+                                    <select id="cboser"
+                                            name="cboser"
+                                            class="form-select form-select-lg bg-light"
+                                            required>
+
+                                        {% for x in opcionesServicios %}
+
+                                            {% if x.id == servicio.servicio_contratado_id %}
+                                                <option value="{{ x.id }}" selected>
+                                                    {{ x.nombre_servicio }}
+                                                </option>
+                                            {% else %}
+                                                <option value="{{ x.id }}">
+                                                    {{ x.nombre_servicio }}
+                                                </option>
+                                            {% endif %}
+
+                                        {% endfor %}
+
                                     </select>
                                 </div>
+
                                 <div class="mb-4">
-                                    <input type="number" id="txt3" class="form-control form-control-lg bg-light" placeholder="Dato_4" required/>
+                                    <input type="text"
+                                        id="txt3"
+                                        name="txtemp"
+                                        value="{{ servicio.empresa }}"
+                                        class="form-control form-control-lg bg-light"
+                                        placeholder="Empresa"
+                                        required/>
                                 </div>
+
                                 <div class="mb-4">
-                                    <input type="number" id="txt4" class="form-control form-control-lg bg-light" placeholder="Dato_5" required/>
+                                    <input type="number"
+                                        id="txt4"
+                                        name="txtpre"
+                                        value="{{ servicio.precio_instalacion }}"
+                                        class="form-control form-control-lg bg-light"
+                                        placeholder="Precio Instalación"
+                                        required/>
                                 </div>
+
                                 <div class="d-grid mt-5">
-                                    <button class="btn btn-primary btn-lg py-3">Modificar Datos</button>
+                                    <button class="btn btn-primary btn-lg py-3">
+                                        Modificar Datos
+                                    </button>
                                 </div>
+
+                                {% if r %}
+                                    <div class="alert alert-success text-center mt-4">
+                                        {{ r }}
+                                    </div>
+                                {% endif %}
+                                
                             </form>
 
                         </div>

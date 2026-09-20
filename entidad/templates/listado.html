@@ -28,7 +28,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-5">
             <div class="container-fluid px-4">
                 <a class="navbar-brand d-flex align-items-center" href="/menu">
-                    <h2 class="mb-0 fs-4 fw-bold">USUARIO : XXX</h2>
+                    <h2 class="mb-0 fs-4 fw-bold">USUARIO : {{ nomUsuario }}</h2>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -46,39 +46,44 @@
         <div class="container-fluid px-4 px-lg-5">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body p-4">
-                    <h2 class="text-center mb-4 fw-bold text-dark">Listado de Entidad</h2>
+                    <h2 class="text-center mb-4 fw-bold text-dark">Listado de Servicios</h2>
                     
                     <div class="table-responsive">
                         <table class="table table-hover table-borderless align-middle text-center">
                             <thead class="table-dark">
                                 <tr>
-                                    <th class="py-3">DATO_1</th>
-                                    <th class="py-3">DATO_2</th>
-                                    <th class="py-3">DATO_3</th>
-                                    <th class="py-3">DATO_4</th>
-                                    <th class="py-3">DATO_5</th>
+                                    <th class="py-3">NÚMERO</th>
+                                    <th class="py-3">CLIENTE</th>
+                                    <th class="py-3">SERVICIO CONTRATADO</th>
+                                    <th class="py-3">EMPRESA</th>
+                                    <th class="py-3">PRECIO INSTALACIÓN</th>
                                     <th class="py-3">EDITAR</th>
                                     <th class="py-3">ELIMINAR</th>
                                 </tr>
                             </thead>
                             <tbody class="border-top-0">
+                                {% for x in servicios %}
                                 <tr>
-                                    <td class="py-3">Valor 1</td>
-                                    <td class="py-3">Valor 2</td>
-                                    <td class="py-3">Valor 3</td>
-                                    <td class="py-3">Valor 4</td>
-                                    <td class="py-3">Valor 5</td>
+                                    <td class="py-3">{{ x.numero }}</td>
+                                    <td class="py-3">{{ x.cliente }}</td>
+                                    <td class="py-3">{{ x.servicio_contratado__nombre_servicio }}</td>
+                                    <td class="py-3">{{ x.empresa }}</td>
+                                    <td class="py-3">${{ x.precio_instalacion }}</td>
+
                                     <td class="py-3">
-                                        <a href="" class="btn btn-outline-primary btn-sm">
+                                        <a href="/form_actualizar/{{ x.id }}" class="btn btn-outline-primary btn-sm">
                                             <i class="bi bi-pencil-fill"></i>
                                         </a>
                                     </td>
+
                                     <td class="py-3">
-                                        <button class="btn btn-outline-danger btn-sm" onClick="botonEliminar(1)">
+                                        <button class="btn btn-outline-danger btn-sm"
+                                                onClick="botonEliminar({{ x.id }})">
                                             <i class="bi bi-trash3-fill"></i>
                                         </button>
                                     </td>
                                 </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>

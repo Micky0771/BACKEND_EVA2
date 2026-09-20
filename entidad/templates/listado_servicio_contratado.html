@@ -1,0 +1,125 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Listado Servicios Contratados</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+        <script>
+            const botonCerrarSesion = () => {
+                if(window.confirm("¿Está Seguro De Querer Cerrar La Sesión?")){
+                    window.location.href = "/logout";
+                }
+            }
+
+            const botonEliminar = (id) => {
+                if(window.confirm("¿Está Seguro(a) De Querer Eliminar El Registro?")){
+                    window.location.href = "/eliminar_servicio_contratado/" + id;
+                }
+            }
+        </script>
+    </head>
+
+    <body class="bg-light">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3">
+            <div class="container-fluid px-4">
+
+                <a class="navbar-brand d-flex align-items-center" href="/menu_admin">
+                    <h2 class="mb-0 fs-4 fw-bold">
+                        USUARIO : {{ nomUsuario }}
+                    </h2>
+                </a>
+
+                <div class="navbar-nav ms-auto align-items-center">
+
+                    <a class="nav-link fs-5 px-3"
+                        href="/form_reg_servicio_contratado">
+                        Formulario
+                    </a>
+
+                    <a class="nav-link fs-5 px-3"
+                    href="/listado_servicio_contratado">
+                        Listado
+                    </a>
+
+                    <a class="nav-link fs-5 px-3 text-danger fw-semibold"
+                    href="#"
+                    onClick="botonCerrarSesion()">
+                        Cerrar Sesión
+                    </a>
+
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body p-5">
+
+                    <h2 class="text-center mb-4">
+                        Listado de Servicios Contratados
+                    </h2>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-hover text-center align-middle">
+
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>SERVICIO CONTRATADO</th>
+                                    <th>EDITAR</th>
+                                    <th>ELIMINAR</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% for x in serviciosContratados %}
+
+                                <tr>
+                                    <td class="py-3">{{ x.id }}</td>
+                                    <td class="py-3">{{ x.nombre_servicio }}</td>
+                                    <td class="py-3">
+                                        <a href="/form_actualizar_servicio_contratado/{{ x.id }}"
+                                        class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                    </td>
+
+                                    <td class="py-3">
+                                        <button class="btn btn-outline-danger btn-sm"
+                                                onClick="botonEliminar({{ x.id }})">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+</html>
+
+
+
