@@ -99,6 +99,13 @@ def eliminar_servicio(request, id):
     if (estadoSesion and nomUsuario != "ADMIN"):
 
         Servicio.objects.filter(id=id).delete()
+        
+        Historial.objects.create(
+            usuario_id=request.session["idUsuario"],
+            descripcion_historial="Eliminación de Servicio",
+            tabla_afectada_historial="Servicio",
+            fecha_hora_historial=datetime.now()
+        )
 
         return mostrar_listado(request)
 
@@ -109,6 +116,51 @@ def eliminar_servicio(request, id):
 
         return render(request, "index.html", datos)
 
+
+#-------------------------------------------------------------------------------------
+
+def mostrar_menu_admin(request):
+    estadoSesion = request.session.get("estadoSesion")
+    nomUsuario = request.session.get("nomUsuario")
+
+    if (estadoSesion and nomUsuario == "ADMIN"):
+
+        datos = {
+            'nomUsuario': nomUsuario
+        }
+
+        return render(request, "menu_admin.html", datos)
+
+    else:
+
+        datos = {
+            'r2': 'No tiene privilegios para acceder!!!'
+        }
+
+        return render(request, "index.html", datos)
+
+
+#-------------------------------------------------------------------------------------
+
+def mostrar_menu_usuario(request):
+    estadoSesion = request.session.get("estadoSesion")
+    nomUsuario = request.session.get("nomUsuario")
+
+    if (estadoSesion and nomUsuario != "ADMIN"):
+
+        datos = {
+            'nomUsuario': nomUsuario
+        }
+
+        return render(request, "menu_usuario.html", datos)
+
+    else:
+
+        datos = {
+            'r2': 'No tiene privilegios para acceder!!!'
+        }
+
+        return render(request, "index.html", datos)
 
 #-------------------------------------------------------------------------------------
 
@@ -191,6 +243,13 @@ def mostrar_form_act(request, id):
                 precio_instalacion=pre
             )
             
+            Historial.objects.create(
+                usuario_id=request.session["idUsuario"],
+                descripcion_historial="Modificación de Servicio",
+                tabla_afectada_historial="Servicio",
+                fecha_hora_historial=datetime.now()
+            )
+            
             r = "Servicio modificado correctamente!!!"
 
         servicio = Servicio.objects.filter(id=id).values()
@@ -232,6 +291,13 @@ def mostrar_form_reg_servicio_contratado(request):
                 nombre_servicio=nom
             )
 
+            Historial.objects.create(
+                usuario_id=request.session["idUsuario"],
+                descripcion_historial="Registro de Servicio Contratado",
+                tabla_afectada_historial="ServicioContratado",
+                fecha_hora_historial=datetime.now()
+            )
+            
             r = "Servicio contratado registrado correctamente!!!"
 
         datos = {
@@ -290,6 +356,13 @@ def mostrar_form_act_servicio_contratado(request, id):
             ServicioContratado.objects.filter(id=id).update(
                 nombre_servicio=nom
             )
+            
+            Historial.objects.create(
+                usuario_id=request.session["idUsuario"],
+                descripcion_historial="Modificación de Servicio Contratado",
+                tabla_afectada_historial="ServicioContratado",
+                fecha_hora_historial=datetime.now()
+            )
 
             r = "Servicio contratado modificado correctamente!!!"
 
@@ -319,6 +392,13 @@ def eliminar_servicio_contratado(request, id):
     if (estadoSesion and nomUsuario == "ADMIN"):
 
         ServicioContratado.objects.filter(id=id).delete()
+        
+        Historial.objects.create(
+            usuario_id=request.session["idUsuario"],
+            descripcion_historial="Eliminación de Servicio Contratado",
+            tabla_afectada_historial="ServicioContratado",
+            fecha_hora_historial=datetime.now()
+        )
 
         return mostrar_listado_servicio_contratado(request)
 
@@ -331,6 +411,38 @@ def eliminar_servicio_contratado(request, id):
 
 
 #-------------------------------------------------------------------------------------
+
+def mostrar_historial(request):
+    estadoSesion = request.session.get("estadoSesion")
+    nomUsuario = request.session.get("nomUsuario")
+
+    if (estadoSesion and nomUsuario == "ADMIN"):
+
+        historial = Historial.objects.all().values(
+            'id',
+            'descripcion_historial',
+            'tabla_afectada_historial',
+            'fecha_hora_historial',
+            'usuario__nombre_usuario'
+        ).order_by('-id')
+
+        datos = {
+            'nomUsuario': nomUsuario,
+            'historial': historial
+        }
+
+        return render(request, "historial.html", datos)
+
+    else:
+        datos = {
+            'r2': 'No tiene privilegios para acceder!!!'
+        }
+
+        return render(request, "index.html", datos)
+
+
+#-------------------------------------------------------------------------------------
+
 
 def cerrar_sesion(request):
     try:
