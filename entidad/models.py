@@ -4,6 +4,9 @@ from django.db import models
 class Usuario(models.Model):
     nombre_usuario = models.TextField(max_length=15)
     password_usuario = models.TextField(max_length=20)
+    
+    def __str__(self):
+        return str(self.nombre_usuario)
 
 class ServicioContratado(models.Model):
     nombre_servicio = models.TextField(max_length=100)

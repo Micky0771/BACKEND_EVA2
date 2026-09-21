@@ -98,7 +98,23 @@ def eliminar_servicio(request, id):
 
     if (estadoSesion and nomUsuario != "ADMIN"):
 
-        Servicio.objects.filter(id=id).delete()
+        resultado = Servicio.objects.filter(id=id).delete()
+        
+        if (resultado[0] == 0):
+            datos = {
+                'r2': 'Error al eliminar el Servicio!!!',
+                'nomUsuario': nomUsuario,
+                'servicios': Servicio.objects.all().values(
+                    'id',
+                    'numero',
+                    'cliente',
+                    'servicio_contratado__nombre_servicio',
+                    'empresa',
+                    'precio_instalacion'
+                ).order_by('numero')
+            }
+
+            return render(request, "listado.html", datos)
         
         Historial.objects.create(
             usuario_id=request.session["idUsuario"],
@@ -107,7 +123,20 @@ def eliminar_servicio(request, id):
             fecha_hora_historial=datetime.now()
         )
 
-        return mostrar_listado(request)
+        datos = {
+            'r': 'Servicio eliminado correctamente!!!',
+            'nomUsuario': nomUsuario,
+            'servicios': Servicio.objects.all().values(
+                'id',
+                'numero',
+                'cliente',
+                'servicio_contratado__nombre_servicio',
+                'empresa',
+                'precio_instalacion'
+            ).order_by('numero')
+        }
+
+        return render(request, "listado.html", datos)
 
     else:
         datos = {
@@ -235,13 +264,30 @@ def mostrar_form_act(request, id):
             emp = request.POST['txtemp']
             pre = request.POST['txtpre']
 
-            Servicio.objects.filter(id=id).update(
+            resultado = Servicio.objects.filter(id=id).update(
                 numero=num,
                 cliente=cli,
                 servicio_contratado_id=ser,
                 empresa=emp,
                 precio_instalacion=pre
             )
+            
+            if (resultado == 0):
+                datos = {
+                    'r2': 'Error al modificar el Servicio!!!',
+                    'nomUsuario': nomUsuario,
+                    'servicios': Servicio.objects.all().values(
+                        'id',
+                        'numero',
+                        'cliente',
+                        'servicio_contratado__nombre_servicio',
+                        'empresa',
+                        'precio_instalacion'
+                    ).order_by('numero')
+                }
+
+                return render(request, "listado.html", datos)
+            
             
             Historial.objects.create(
                 usuario_id=request.session["idUsuario"],
@@ -253,6 +299,22 @@ def mostrar_form_act(request, id):
             r = "Servicio modificado correctamente!!!"
 
         servicio = Servicio.objects.filter(id=id).values()
+        
+        if (len(servicio) == 0):
+            datos = {
+                'r2': 'Servicio no encontrado!!!',
+                'nomUsuario': nomUsuario,
+                'servicios': Servicio.objects.all().values(
+                    'id',
+                    'numero',
+                    'cliente',
+                    'servicio_contratado__nombre_servicio',
+                    'empresa',
+                    'precio_instalacion'
+                ).order_by('numero')
+            }
+
+            return render(request, "listado.html", datos)
 
         opcionesServicios = ServicioContratado.objects.all().values().order_by("nombre_servicio")
 
@@ -353,9 +415,18 @@ def mostrar_form_act_servicio_contratado(request, id):
 
             nom = request.POST['txtnom']
 
-            ServicioContratado.objects.filter(id=id).update(
+            resultado = ServicioContratado.objects.filter(id=id).update(
                 nombre_servicio=nom
             )
+            
+            if (resultado == 0):
+                datos = {
+                    'r2': 'Error al modificar el Servicio Contratado!!!',
+                    'nomUsuario': nomUsuario,
+                    'serviciosContratados': ServicioContratado.objects.all().values().order_by("nombre_servicio")
+                }
+
+                return render(request, "listado_servicio_contratado.html", datos)
             
             Historial.objects.create(
                 usuario_id=request.session["idUsuario"],
@@ -367,6 +438,15 @@ def mostrar_form_act_servicio_contratado(request, id):
             r = "Servicio contratado modificado correctamente!!!"
 
         servicioContratado = ServicioContratado.objects.filter(id=id).values()
+        
+        if (len(servicioContratado) == 0):
+            datos = {
+                'r2': 'Servicio Contratado no encontrado!!!',
+                'nomUsuario': nomUsuario,
+                'serviciosContratados': ServicioContratado.objects.all().values().order_by("nombre_servicio")
+            }
+
+            return render(request, "listado_servicio_contratado.html", datos)
 
         datos = {
             'nomUsuario': nomUsuario,
@@ -391,7 +471,16 @@ def eliminar_servicio_contratado(request, id):
 
     if (estadoSesion and nomUsuario == "ADMIN"):
 
-        ServicioContratado.objects.filter(id=id).delete()
+        resultado = ServicioContratado.objects.filter(id=id).delete()
+        
+        if (resultado[0] == 0):
+            datos = {
+                'r2': 'Error al eliminar el Servicio Contratado!!!',
+                'nomUsuario': nomUsuario,
+                'serviciosContratados': ServicioContratado.objects.all().values().order_by("nombre_servicio")
+            }
+
+            return render(request, "listado_servicio_contratado.html", datos)
         
         Historial.objects.create(
             usuario_id=request.session["idUsuario"],
@@ -400,7 +489,13 @@ def eliminar_servicio_contratado(request, id):
             fecha_hora_historial=datetime.now()
         )
 
-        return mostrar_listado_servicio_contratado(request)
+        datos = {
+            'r': 'Servicio Contratado eliminado correctamente!!!',
+            'nomUsuario': nomUsuario,
+            'serviciosContratados': ServicioContratado.objects.all().values().order_by("nombre_servicio")
+        }
+
+        return render(request, "listado_servicio_contratado.html", datos)
 
     else:
         datos = {
