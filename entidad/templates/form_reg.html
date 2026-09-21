@@ -4,9 +4,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Registrar</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    
+
         <script>
             const botonCerrarSesion = () => {
                 if(window.confirm("¿Está Seguro De Querer Cerrar La Sesión?")){
@@ -15,83 +16,128 @@
             }
         </script>
     </head>
+
     <body class="bg-light">
-        
+
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 mb-5">
             <div class="container-fluid px-4">
+
                 <a class="navbar-brand d-flex align-items-center" href="/menu_usuario">
-                    <h2 class="mb-0 fs-4 fw-bold">USUARIO : {{ nomUsuario }}</h2>
+                    <h2 class="mb-0 fs-4 fw-bold">
+                        USUARIO : {{ nomUsuario }}
+                    </h2>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav ms-auto align-items-center">
-                        <a class="nav-link fs-5 px-3" href="/form_registrar">Formulario</a>
-                        <a class="nav-link fs-5 px-3" href="/listado">Listado</a>
-                        <a class="nav-link fs-5 px-3 text-danger fw-semibold" href="#" onClick="botonCerrarSesion()">Cerrar Sesión</a>
+
+                        <a class="nav-link fs-5 px-3"
+                           href="/form_registrar">
+                            Formulario
+                        </a>
+
+                        <a class="nav-link fs-5 px-3"
+                           href="/listado">
+                            Listado
+                        </a>
+
+                        <a class="nav-link fs-5 px-3 text-danger fw-semibold"
+                           href="#"
+                           onClick="botonCerrarSesion()">
+                            Cerrar Sesión
+                        </a>
+
                     </div>
                 </div>
+
             </div>
         </nav>
 
         <div class="container">
+
             <div class="row justify-content-center">
+
                 <div class="col-12 col-lg-8">
+
                     <div class="card shadow-sm border-0 rounded-3">
+
                         <div class="card-body p-5">
-                            <h2 class="text-center mb-4 fw-bold text-dark">Formulario de Gestión de Entidad</h2>
-                            
+
+                            <h2 class="text-center mb-4 fw-bold text-dark">
+                                Formulario de Gestión de Entidad
+                            </h2>
+
                             <form action="" method="POST">
+
                                 {% csrf_token %}
+
                                 <div class="mb-4">
-                                    <input  type="number" 
-                                            id="txt1" 
-                                            name="txtnum"
-                                            class="form-control form-control-lg bg-light"
-                                            placeholder="Número"
-                                            required/>
+                                    <input type="number"
+                                           id="txt1"
+                                           name="txtnum"
+                                           class="form-control form-control-lg bg-light"
+                                           placeholder="Número"
+                                           required/>
                                 </div>
+
                                 <div class="mb-4">
-                                    <input  type="text"
-                                            id="txt2" 
-                                            name="txtcli"
-                                            class="form-control form-control-lg bg-light"
-                                            placeholder="Cliente"
-                                            required/>
+                                    <input type="text"
+                                           id="txt2"
+                                           name="txtcli"
+                                           class="form-control form-control-lg bg-light"
+                                           placeholder="Cliente"
+                                           required/>
                                 </div>
+
                                 <div class="mb-4">
+
                                     <select id="cboser"
                                             name="cboser"
                                             class="form-select form-select-lg bg-light"
                                             required>
 
-                                        <option value="">Servicio Contratado</option>
+                                        <option value="">
+                                            Servicio Contratado
+                                        </option>
+
                                         {% for x in opcionesServicios %}
                                             <option value="{{ x.id }}">
                                                 {{ x.nombre_servicio }}
                                             </option>
                                         {% endfor %}
 
-
                                     </select>
+
                                 </div>
+
                                 <div class="mb-4">
                                     <input type="text"
-                                        id="txt3"
-                                        name="txtemp"
-                                        class="form-control form-control-lg bg-light"
-                                        placeholder="Empresa"
-                                        required/>
+                                           id="txt3"
+                                           name="txtemp"
+                                           class="form-control form-control-lg bg-light"
+                                           placeholder="Empresa"
+                                           required/>
                                 </div>
+
                                 <div class="mb-4">
-                                    <input  type="number"
-                                            id="txt4"
-                                            name="txtpre"
-                                            class="form-control form-control-lg bg-light"
-                                            placeholder="Precio Instalación"
-                                            required/>
+                                    <input type="number"
+                                           id="txt4"
+                                           name="txtpre"
+                                           class="form-control form-control-lg bg-light"
+                                           placeholder="Precio Instalación"
+                                           required/>
                                 </div>
+
                                 <div class="d-grid mt-5">
                                     <button class="btn btn-dark btn-lg py-3">
                                         Registrar Servicio
@@ -103,15 +149,27 @@
                                         {{ r }}
                                     </div>
                                 {% endif %}
-                            
+
+                                {% if r2 %}
+                                    <div class="alert alert-danger text-center mt-4">
+                                        {{ r2 }}
+                                    </div>
+                                {% endif %}
+
                             </form>
-                            
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
     </body>
 </html>
+

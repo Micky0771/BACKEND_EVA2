@@ -210,6 +210,19 @@ def mostrar_form_reg(request):
             emp = request.POST['txtemp']
             pre = request.POST['txtpre']
 
+            existe = Servicio.objects.filter(numero=num).exists()
+
+            if (existe):
+                opcionesServicios = ServicioContratado.objects.all().values().order_by("nombre_servicio")
+
+                datos = {
+                    'r2': 'El Servicio ya se encuentra registrado!!!',
+                    'nomUsuario': nomUsuario,
+                    'opcionesServicios': opcionesServicios
+                }
+
+                return render(request, "form_reg.html", datos)
+
             Servicio.objects.create(
                 numero=num,
                 cliente=cli,
@@ -243,7 +256,6 @@ def mostrar_form_reg(request):
         }
 
         return render(request, "index.html", datos)
-    
     
     
 #-------------------------------------------------------------------------------------
@@ -295,8 +307,21 @@ def mostrar_form_act(request, id):
                 tabla_afectada_historial="Servicio",
                 fecha_hora_historial=datetime.now()
             )
-            
-            r = "Servicio modificado correctamente!!!"
+
+            datos = {
+                'r': 'Servicio modificado correctamente!!!',
+                'nomUsuario': nomUsuario,
+                'servicios': Servicio.objects.all().values(
+                    'id',
+                    'numero',
+                    'cliente',
+                    'servicio_contratado__nombre_servicio',
+                    'empresa',
+                    'precio_instalacion'
+                ).order_by('numero')
+            }
+
+            return render(request, "listado.html", datos)
 
         servicio = Servicio.objects.filter(id=id).values()
         
@@ -349,6 +374,18 @@ def mostrar_form_reg_servicio_contratado(request):
 
             nom = request.POST['txtnom']
 
+            existe = ServicioContratado.objects.filter(
+                nombre_servicio=nom
+            ).exists()
+
+            if (existe):
+                datos = {
+                    'r2': 'El Servicio Contratado ya se encuentra registrado!!!',
+                    'nomUsuario': nomUsuario
+                }
+
+                return render(request, "form_reg_servicio_contratado.html", datos)
+
             ServicioContratado.objects.create(
                 nombre_servicio=nom
             )
@@ -369,14 +406,16 @@ def mostrar_form_reg_servicio_contratado(request):
 
         return render(request, "form_reg_servicio_contratado.html", datos)
 
-        
     else:
         datos = {
             'r2': 'No tiene privilegios para acceder!!!'
         }
 
         return render(request, "index.html", datos)
-
+    
+    
+    
+    
 #-------------------------------------------------------------------------------------
 
 def mostrar_listado_servicio_contratado(request):
@@ -435,7 +474,13 @@ def mostrar_form_act_servicio_contratado(request, id):
                 fecha_hora_historial=datetime.now()
             )
 
-            r = "Servicio contratado modificado correctamente!!!"
+            datos = {
+                'r': 'Servicio contratado modificado correctamente!!!',
+                'nomUsuario': nomUsuario,
+                'serviciosContratados': ServicioContratado.objects.all().values().order_by("nombre_servicio")
+            }
+
+            return render(request, "listado_servicio_contratado.html", datos)
 
         servicioContratado = ServicioContratado.objects.filter(id=id).values()
         
